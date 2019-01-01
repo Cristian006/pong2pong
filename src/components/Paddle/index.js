@@ -1,32 +1,35 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { withTheme } from 'styled-components';
 import Draggable from 'react-draggable';
 
 const Wrapper = styled.div`
-  width: 10%;
+  width: ${({theme}) => theme.paddleWidth}px;
   height: 10px;
+  border-radius: 4px;
   position: absolute;
-  top: ${props => props.theme.paddleTop};
-  left: ${props => props.theme.paddleLeft};
-  background-color: ${props => props.theme.fontColor}
+  bottom: 0;
+  left: ${props => props.pos}px;
+  background-color: #fff;
 `;
 
 class Paddle extends React.Component {
+  handleDrag = (e) => {
+    console.log(e);
+  };
+
   render() {
+    const { position, width } = this.props;
+    const { paddleWidth } = this.props.theme;
+    console.log(position);
     return (
       <Draggable
         axis="x"
-        handle=".handle"
-        defaultPosition={{x: 0, y: 0}}
-        position={null}
-        scale={1}
-        onStart={this.handleStart}
-        onDrag={this.handleDrag}
-        onStop={this.handleStop}>
-        <Wrapper />
+        bounds={{left: (0 - width) + (paddleWidth), right: (width / 2) - paddleWidth}}
+      >
+        <Wrapper pos={position} />
       </Draggable>
     )
   }
 }
 
-export default Paddle;
+export default withTheme(Paddle);

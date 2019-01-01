@@ -6,6 +6,7 @@ import './App.css';
 
 const theme = {
   backgroundColor: '#282c34',
+  paddleWidth: 200,
 }
 
 const GlobalStyle = createGlobalStyle`
