@@ -3,18 +3,17 @@ import styled from 'styled-components';
 
 const Wrapper = styled.div`
   position: absolute;
-  left: ${props => props.theme.ballLeft};
-  top: ${props => props.theme.ballTop};
   width: 30px;
   height: 30px;
   border-radius: 50%;
   background-color: ${props => props.theme.fontColor}
 `;
 
-class Ball extends React.PureComponent {
+class Ball extends React.Component {
   render() {
+    const { x, y } = this.props;
     return (
-      <Wrapper />
+      <Wrapper style={{ left: x, bottom: y }}/>
     );
   }
 }
