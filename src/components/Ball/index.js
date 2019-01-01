@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Wrapper = `
+const Wrapper = styled.div`
   position: absolute;
   left: ${props => props.theme.ballLeft};
   top: ${props => props.theme.ballTop};

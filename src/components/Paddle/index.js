@@ -28,3 +28,5 @@ class Paddle extends React.Component {
     )
   }
 }
+
+export default Paddle;
