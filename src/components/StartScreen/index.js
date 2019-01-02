@@ -60,7 +60,7 @@ class StartScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      roomName: ''
+      roomName: window.location.hash ? window.location.hash.substr(1) : ''
     };
   }
 
@@ -68,6 +68,7 @@ class StartScreen extends React.Component {
     const { roomName } = this.state;
     if (roomName) {
       this.props.onJoinRoom(roomName);
+      window.location.hash = `#${roomName}`;
     }
   }
 

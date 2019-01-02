@@ -102,6 +102,15 @@ class App extends Component {
     this.setState({ waitingForPlayer: false, renderBall: firstPlayer });
   }
 
+  handlePeerQuit = () => {
+    this.setState({
+      waitingForPlayer: true,
+      ballPosition: null,
+      renderBall: false,
+      ballVector: { x: 0, y: -10 }
+    });
+  }
+
   render() {
     const { ballPosition, ballVector, renderBall, startGame, waitingForPlayer } = this.state;
     return (
@@ -117,6 +126,7 @@ class App extends Component {
                     onReady={this.handleReadyToJoin}
                     onJoinedRoom={this.handleJoined}
                     onChannelOpen={this.readyToPlay}
+                    onRemovedPeer={this.handlePeerQuit}
                   >
                     <Pong
                       ballPosition={{

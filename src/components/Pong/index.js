@@ -100,7 +100,7 @@ class Pong extends Component {
     }
     if (ballPosition.y <= 10) {
       // Ball x coord is between paddle x0 and x1
-      if (paddleVars.x0 <= ballPosition.x <= paddleVars.x1) {
+      if (paddleVars.x <= ballPosition.x + 30 && paddleVars.x1 >= ballPosition.x) {
         this.props.setBallVector({ x: ballVector.x + paddleVars.deltaX, y: -ballVector.y });
         this.setState({ ballPosition: {
           x: ballPosition.x + ballVector.x + paddleVars.deltaX,
@@ -109,12 +109,12 @@ class Pong extends Component {
         return;
       } else {
         // Handle ball fall-through
-        console.log('FALL');
         this.props.setBallVector({ x: 0, y: -10 });
         this.setState({ ballPosition: {
-          x: this.props.theme.ballLeft,
-          y: this.props.theme.ballBottom }
+          x: (window.innerWidth / 2) - 15,
+          y: window.innerHeight - 300 }
         });
+        return;
       }
     }
     if (ballPosition.y >= height - 30 && renderBall && ballVector.y > 0) {
