@@ -14,6 +14,7 @@ const theme = {
 };
 
 const GlobalStyle = createGlobalStyle`
+  @import url('https://fonts.googleapis.com/css?family=Staatliches');
   html {
     box-sizing: border-box;
   }
@@ -22,7 +23,7 @@ const GlobalStyle = createGlobalStyle`
     height: 100vh;
     width: 100vw;
     overflow: hidden;
-    font-family: Consolas;
+    font-family: 'Staatliches', monospace;
   }
 
   * {
@@ -52,8 +53,9 @@ class App extends Component {
       ballVector: { x: 0, y: -10 },
       renderBall: false,
       startGame: false,
-      waitingForPlayer: false,
-      firstPlayer: true
+      waitingForPlayer: true,
+      firstPlayer: true, 
+      score: { player1: 0, player2: 0 },
     };
   }
 
@@ -112,37 +114,49 @@ class App extends Component {
   }
 
   render() {
-    const { ballPosition, ballVector, renderBall, startGame, waitingForPlayer } = this.state;
+    const {
+      ballPosition,
+      ballVector,
+      renderBall,
+      startGame,
+      waitingForPlayer,
+      score,
+      roomName
+    } = this.state;
     return (
       <ThemeProvider theme={theme}>
         <Fragment>
           <GlobalStyle />
             <Container>
                 {
-                  startGame ?
-                  <LioWebRTC
-                    options={lioWebRTCOptions}
-                    onReceivedPeerData={this.handlePeerData}
-                    onReady={this.handleReadyToJoin}
-                    onJoinedRoom={this.handleJoined}
-                    onChannelOpen={this.readyToPlay}
-                    onRemovedPeer={this.handlePeerQuit}
-                  >
-                    <Pong
-                      ballPosition={{
-                      x: ballPosition ? ballPosition : theme.ballLeft,
-                      y: ballPosition ? ballPosition : theme.ballBottom
-                      }}
-                      ballVector={ballVector}
-                      renderBall={renderBall}
-                      onCrossSeparator={this.handleCrossSeparator}
-                      setBallVector={this.handleSetBallVector}
-                      onReadyJoinRoom={this.handleJoin}
-                      waitingForPlayer={waitingForPlayer}
-                    />
-                  </LioWebRTC>
-                  :
-                  <StartScreen onJoinRoom={this.handleJoin} />
+                  startGame ? (
+                    <LioWebRTC
+                      options={lioWebRTCOptions}
+                      onReceivedPeerData={this.handlePeerData}
+                      onReady={this.handleReadyToJoin}
+                      onJoinedRoom={this.handleJoined}
+                      onChannelOpen={this.readyToPlay}
+                      onRemovedPeer={this.handlePeerQuit}
+                    >
+                      <Pong
+                        ballPosition={{
+                          x: ballPosition ? ballPosition : theme.ballLeft,
+                          y: ballPosition ? ballPosition : theme.ballBottom
+                        }}
+                        ballVector={ballVector}
+                        renderBall={renderBall}
+                        onCrossSeparator={this.handleCrossSeparator}
+                        setBallVector={this.handleSetBallVector}
+                        onReadyJoinRoom={this.handleJoin}
+                        waitingForPlayer={waitingForPlayer}
+                        roomName={roomName}
+                        score={score}
+                      />
+                    </LioWebRTC>
+                  )
+                  : (
+                    <StartScreen onJoinRoom={this.handleJoin} />
+                  )
                 }
             </Container>
         </Fragment>

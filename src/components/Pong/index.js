@@ -4,6 +4,7 @@ import { withWebRTC } from 'react-liowebrtc';
 import Separator from '../Separator';
 import Paddle from '../Paddle';
 import Ball from '../Ball';
+import Score from '../Score';
 import Wait from '../Wait';
 
 const Container = styled.div`
@@ -129,7 +130,7 @@ class Pong extends Component {
 
   render() {
     const { position, width, ballPosition } = this.state;
-    const { renderBall, waitingForPlayer } = this.props;
+    const { renderBall, waitingForPlayer, roomName, score } = this.props;
     return (
       <Container>
         <Separator />
@@ -137,10 +138,7 @@ class Pong extends Component {
           renderBall &&
           <Ball x={ballPosition.x} y={ballPosition.y} />
         }
-        {
-          waitingForPlayer &&
-          <Wait />
-        }
+        <Score score={score} waiting={waitingForPlayer} room={roomName} />
         <Paddle width={width} position={position} onPaddleDrag={this.handlePaddleDrag} />
       </Container>
     );
