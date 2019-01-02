@@ -23,7 +23,7 @@ class Pong extends Component {
       width: window.innerWidth,
       height: window.innerHeight,
       moving: 0,
-      paddleVars: { x0: this.startCenter, x1: this.startCenter + props.theme.paddleWidth, deltaX: 0 }
+      paddleVars: { x: this.startCenter, x1: this.startCenter + props.theme.paddleWidth, deltaX: 0 }
     }
     this.handleResize = this.handleResize.bind(this);
     this.movePaddle = this.movePaddle.bind(this);
@@ -182,6 +182,7 @@ class Pong extends Component {
       return;
     }
     if (ballPosition.y <= 10) {
+      console.log('COLLISION', paddleVars, ballPosition);
       // Ball x coord is between paddle x0 and x1
       if (paddleVars.x <= ballPosition.x + 30 && paddleVars.x1 >= ballPosition.x) {
         this.props.setBallVector({ x: ballVector.x + paddleVars.deltaX, y: -ballVector.y });
