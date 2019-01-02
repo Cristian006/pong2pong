@@ -19,30 +19,44 @@ class Pong extends Component {
       position: this.startCenter,
       ballPosition: props.ballPosition,
       ballVector: props.ballVector,
-      speed: 30,
+      speed: 20,
       width: window.innerWidth,
       height: window.innerHeight,
+      moving: 0,
       paddleVars: { x0: this.startCenter, x1: this.startCenter + props.theme.paddleWidth, deltaX: 0 }
     }
-    this.handleKeyPress = this.handleKeyPress.bind(this);
     this.handleResize = this.handleResize.bind(this);
-    this.movePaddel = this.movePaddel.bind(this);
+    this.movePaddle = this.movePaddle.bind(this);
     this.handlePaddleDrag = this.handlePaddleDrag.bind(this);
     this.handleBallMove = this.handleBallMove.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.handleKeyUp = this.handleKeyUp.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.startMoving = this.startMoving.bind(this);
   }
 
   componentDidMount() {
     window.addEventListener('keypress', this.handleKeyPress);
-    window.addEventListener('keydown', this.handleKeyPress);
+    window.addEventListener('keydown', this.handleKeyDown);
+    window.addEventListener('keyup', this.handleKeyUp);
     window.addEventListener('resize', this.handleResize);
-    this.moveBall = setInterval(() => { this.handleBallMove() }, 30);
+    this.applyGravity(true);
   }
 
   componentWillUnmount() {
     window.removeEventListener('keypress', this.handleKeyPress);
-    window.removeEventListener('keydown', this.handleKeyPress);
+    window.removeEventListener('keydown', this.handleKeyDown);
+    window.removeEventListener('keyup', this.handleKeyUp);
     window.removeEventListener('resize', this.handleResize);
-    clearInterval(this.moveBall);
+    this.applyGravity(false);
+  }
+
+  applyGravity(apply=true) {
+    if(apply) {
+      this.moveBall = setInterval(() => { this.handleBallMove() }, 30);
+    } else {
+      clearInterval(this.moveBall);
+    }
   }
 
   handleResize(e) {
@@ -58,23 +72,85 @@ class Pong extends Component {
     return (width / 2) - (this.props.theme.paddleWidth / 2);
   }
 
+  startMoving(direction=0) {
+    if (direction === 0) {
+      // stop moving paddle
+      this.setState({ moving: direction }, () => {
+        clearInterval(this.movingPaddle);
+        this.movingPaddle = null;
+      });
+      return;
+    }
+
+    if (this.state.moving !== direction) {
+      // we are switching directions!
+      clearInterval(this.movingPaddle);
+      this.setState({
+        moving: direction,
+      }, () => {
+        this.movingPaddle = setInterval(() => { this.movePaddle(direction) }, 10);
+      });
+    } else {
+      // we were not moving before -> start moving
+      this.setState({
+        moving: direction,
+      }, () => {
+        this.movingPaddle = setInterval(() => { this.movePaddle(direction) }, 10);
+      });
+    }
+  }
+
   handleKeyPress (e) {
     switch (e.keyCode) {
-      case 37:
-        //left
-        this.movePaddel(-1);
-        break;
-      case 39:
-        //right
-        this.movePaddel(1);
+      case 32:
+        // pause the game
         break;
       default:
         break;
     }
   }
-// paddle
-  movePaddel(direction) {
-    // move paddel postion
+
+  handleKeyDown (e) {
+    switch (e.keyCode) {
+      case 65:
+      case 37:
+        //left
+        if (this.state.moving >= 0) {
+          this.startMoving(-1);
+        }
+        break;
+      case 68:
+      case 39:
+        //right
+        if (this.state.moving <= 0) {
+          this.startMoving(1);
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+  handleKeyUp (e) {
+    // stop moving
+    switch (e.keyCode) {
+      case 65:
+      case 37:
+        //left
+        this.startMoving(0);
+        break;
+      case 68:
+      case 39:
+        //right
+        this.startMoving(0);
+        break;
+      default:
+        break;
+    }
+  }
+
+  movePaddle(direction) {
+    // move paddle postion
     const { width, speed } = this.state;
     const { paddleWidth } = this.props.theme;
     const delta = speed * direction;
