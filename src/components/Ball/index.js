@@ -13,7 +13,7 @@ class Ball extends React.Component {
   render() {
     const { x, y } = this.props;
     return (
-      <Wrapper style={{ left: x, bottom: y }}/>
+      <Wrapper style={{ left: x, bottom: y }} />
     );
   }
 }

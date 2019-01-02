@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import styled, { withTheme } from 'styled-components';
+import { withWebRTC } from 'react-liowebrtc';
 import Separator from '../Separator';
 import Paddle from '../Paddle';
 import Ball from '../Ball';
+import Wait from '../Wait';
 
 const Container = styled.div`
   width: 100%;
@@ -14,13 +16,12 @@ class Pong extends Component {
     super(props);
     this.state = {
       position: this.startCenter,
-      ballPosition: this.props.ballPosition,
-      ballVector: { x: 0, y: -10 },
+      ballPosition: props.ballPosition,
+      ballVector: props.ballVector,
       speed: 30,
       width: window.innerWidth,
       height: window.innerHeight,
-      paddleVars: { x0: this.startCenter, x1: this.startCenter + props.theme.paddleWidth, deltaX: 0 },
-      renderBall: true
+      paddleVars: { x0: this.startCenter, x1: this.startCenter + props.theme.paddleWidth, deltaX: 0 }
     }
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.handleResize = this.handleResize.bind(this);
@@ -87,28 +88,48 @@ class Pong extends Component {
   }
 
   handleBallMove() {
-    const { ballPosition, ballVector, paddleVars, width, height } = this.state;
+    const { ballPosition, paddleVars, width, height } = this.state;
+    const { ballVector } = this.props;
+
+    const { renderBall } = this.props;
+    // Handle wall collision
     if (ballPosition.x <= 0 || ballPosition.x >= width - 30) {
-      this.setState({ ballVector: { x: -ballVector.x, y: ballVector.y } }, () => {
-        this.setState({ ballPosition: { x: ballPosition.x + this.state.ballVector.x, y: ballPosition.y + this.state.ballVector.y } });
-      });
+      this.props.setBallVector({ x: 0 - ballVector.x, y: ballVector.y });
+      this.setState({ ballPosition: { x: ballPosition.x - ballVector.x, y: ballPosition.y + ballVector.y }});
       return;
     }
-    if (ballPosition.y <= 10 && paddleVars.x0 <= ballPosition.x <= paddleVars.x1) {
-      console.log(ballVector.y);
-      this.setState({ ballVector: { x: ballVector.x + paddleVars.deltaX, y: -ballVector.y } }, () => {
-        this.setState({ ballPosition: { x: ballPosition.x + this.state.ballVector.x, y: ballPosition.y + this.state.ballVector.y } });
-      });
-      return;
+    if (ballPosition.y <= 10) {
+      // Ball x coord is between paddle x0 and x1
+      if (paddleVars.x0 <= ballPosition.x <= paddleVars.x1) {
+        this.props.setBallVector({ x: ballVector.x + paddleVars.deltaX, y: -ballVector.y });
+        this.setState({ ballPosition: {
+          x: ballPosition.x + ballVector.x + paddleVars.deltaX,
+          y: ballPosition.y - ballVector.y
+        }});
+        return;
+      } else {
+        // Handle ball fall-through
+        console.log('FALL');
+        this.props.setBallVector({ x: 0, y: -10 });
+        this.setState({ ballPosition: {
+          x: this.props.theme.ballLeft,
+          y: this.props.theme.ballBottom }
+        });
+      }
     }
-    if (ballPosition.y >= height - 30) {
-      this.setState({ renderBall: false });
+    if (ballPosition.y >= height - 30 && renderBall && ballVector.y > 0) {
+      this.props.onCrossSeparator();
+      this.props.webrtc.shout('crossSeparator', { ballPosition, ballVector });
     }
-    this.setState({ ballPosition: { x: ballPosition.x + ballVector.x, y: ballPosition.y + ballVector.y } });
+    this.setState({ ballPosition: {
+      x: ballPosition.x + ballVector.x,
+      y: ballPosition.y + ballVector.y }
+    });
   }
 
   render() {
-    const { position, width, ballPosition, renderBall } = this.state;
+    const { position, width, ballPosition } = this.state;
+    const { renderBall, waitingForPlayer } = this.props;
     return (
       <Container>
         <Separator />
@@ -116,10 +137,14 @@ class Pong extends Component {
           renderBall &&
           <Ball x={ballPosition.x} y={ballPosition.y} />
         }
+        {
+          waitingForPlayer &&
+          <Wait />
+        }
         <Paddle width={width} position={position} onPaddleDrag={this.handlePaddleDrag} />
       </Container>
     );
   }
 }
 
-export default withTheme(Pong);
+export default withWebRTC(withTheme(Pong));

@@ -2550,11 +2550,11 @@ date-now@^0.1.4:
 
 debug@0.7.4:
   version "0.7.4"
-  resolved "https://registry.yarnpkg.com/debug/-/debug-0.7.4.tgz#06e1ea8082c2cb14e39806e22e2f6f757f92af39"
+  resolved "http://registry.npmjs.org/debug/-/debug-0.7.4.tgz#06e1ea8082c2cb14e39806e22e2f6f757f92af39"
 
 debug@1.0.4:
   version "1.0.4"
-  resolved "https://registry.yarnpkg.com/debug/-/debug-1.0.4.tgz#5b9c256bd54b6ec02283176fa8a0ede6d154cbf8"
+  resolved "http://registry.npmjs.org/debug/-/debug-1.0.4.tgz#5b9c256bd54b6ec02283176fa8a0ede6d154cbf8"
   dependencies:
     ms "0.6.2"
 
@@ -2891,7 +2891,7 @@ end-of-stream@^1.0.0, end-of-stream@^1.1.0:
 
 engine.io-client@1.5.4:
   version "1.5.4"
-  resolved "https://registry.yarnpkg.com/engine.io-client/-/engine.io-client-1.5.4.tgz#c6ad65a65752a29cb930c6911e579d2b28d1106c"
+  resolved "http://registry.npmjs.org/engine.io-client/-/engine.io-client-1.5.4.tgz#c6ad65a65752a29cb930c6911e579d2b28d1106c"
   dependencies:
     component-emitter "1.1.2"
     component-inherit "0.0.3"
@@ -2907,7 +2907,7 @@ engine.io-client@1.5.4:
 
 engine.io-parser@1.2.2:
   version "1.2.2"
-  resolved "https://registry.yarnpkg.com/engine.io-parser/-/engine.io-parser-1.2.2.tgz#cd081041feea39c64323ff79b82a90a72afcccdd"
+  resolved "http://registry.npmjs.org/engine.io-parser/-/engine.io-parser-1.2.2.tgz#cd081041feea39c64323ff79b82a90a72afcccdd"
   dependencies:
     after "0.8.1"
     arraybuffer.slice "0.0.6"
@@ -5219,9 +5219,9 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-liowebrtc@^0.2.11:
-  version "0.2.11"
-  resolved "https://registry.yarnpkg.com/liowebrtc/-/liowebrtc-0.2.11.tgz#1eb646f7eed356a588f0c4ad7952a82fdf68bcbd"
+liowebrtc@^0.2.12:
+  version "0.2.12"
+  resolved "https://registry.yarnpkg.com/liowebrtc/-/liowebrtc-0.2.12.tgz#7509712bcb24ed4cfcfdf4d7c8c2d7aef886c89e"
   dependencies:
     attachmediastream "^2.0.4"
     filetransfer "^2.0.4"
@@ -5646,7 +5646,7 @@ move-concurrently@^1.0.1:
 
 ms@0.6.2:
   version "0.6.2"
-  resolved "https://registry.yarnpkg.com/ms/-/ms-0.6.2.tgz#d89c2124c6fdc1353d65a8b77bf1aac4b193708c"
+  resolved "http://registry.npmjs.org/ms/-/ms-0.6.2.tgz#d89c2124c6fdc1353d65a8b77bf1aac4b193708c"
 
 ms@2.0.0:
   version "2.0.0"
@@ -5677,7 +5677,7 @@ nan@^2.0.5, nan@^2.9.2:
 
 nan@~2.4.0:
   version "2.4.0"
-  resolved "https://registry.yarnpkg.com/nan/-/nan-2.4.0.tgz#fb3c59d45fe4effe215f0b890f8adf6eb32d2232"
+  resolved "http://registry.npmjs.org/nan/-/nan-2.4.0.tgz#fb3c59d45fe4effe215f0b890f8adf6eb32d2232"
 
 nanomatch@^1.2.9:
   version "1.2.13"
@@ -7158,6 +7158,12 @@ react-is@^16.6.0:
   version "16.7.0"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.7.0.tgz#c1bd21c64f1f1364c6f70695ec02d69392f41bfa"
 
+react-liowebrtc@^1.2.4:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/react-liowebrtc/-/react-liowebrtc-1.2.4.tgz#63fa193cbb287f6539d425944984648f8e98201f"
+  dependencies:
+    liowebrtc "^0.2.12"
+
 react-scripts@2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/react-scripts/-/react-scripts-2.1.2.tgz#cf1686cd9ca3c6148e1428e97aac12995f01b554"
@@ -7738,7 +7744,7 @@ setprototypeof@1.1.0:
 
 sha.js@^2.4.0, sha.js@^2.4.8:
   version "2.4.11"
-  resolved "https://registry.yarnpkg.com/sha.js/-/sha.js-2.4.11.tgz#37a5cf0b81ecbc6943de109ba2960d1b26584ae7"
+  resolved "http://registry.npmjs.org/sha.js/-/sha.js-2.4.11.tgz#37a5cf0b81ecbc6943de109ba2960d1b26584ae7"
   dependencies:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
@@ -7836,7 +7842,7 @@ snapdragon@^0.8.1:
 
 socket.io-client@1.3.7:
   version "1.3.7"
-  resolved "https://registry.yarnpkg.com/socket.io-client/-/socket.io-client-1.3.7.tgz#7ab7c069b8d50425eb265f031f84a97e6ebe719c"
+  resolved "http://registry.npmjs.org/socket.io-client/-/socket.io-client-1.3.7.tgz#7ab7c069b8d50425eb265f031f84a97e6ebe719c"
   dependencies:
     backo2 "1.0.2"
     component-bind "1.0.0"
@@ -7852,7 +7858,7 @@ socket.io-client@1.3.7:
 
 socket.io-parser@2.2.4:
   version "2.2.4"
-  resolved "https://registry.yarnpkg.com/socket.io-parser/-/socket.io-parser-2.2.4.tgz#f9ce19bf1909608ceb15d97721e23bfdd1e7cf65"
+  resolved "http://registry.npmjs.org/socket.io-parser/-/socket.io-parser-2.2.4.tgz#f9ce19bf1909608ceb15d97721e23bfdd1e7cf65"
   dependencies:
     benchmark "1.0.0"
     component-emitter "1.1.2"
@@ -8576,14 +8582,14 @@ use@^3.1.0:
 
 utf-8-validate@1.2.x:
   version "1.2.2"
-  resolved "https://registry.yarnpkg.com/utf-8-validate/-/utf-8-validate-1.2.2.tgz#8bb871a4741e085c70487ca7acdbd7d6d36029eb"
+  resolved "http://registry.npmjs.org/utf-8-validate/-/utf-8-validate-1.2.2.tgz#8bb871a4741e085c70487ca7acdbd7d6d36029eb"
   dependencies:
     bindings "~1.2.1"
     nan "~2.4.0"
 
 utf8@2.1.0:
   version "2.1.0"
-  resolved "https://registry.yarnpkg.com/utf8/-/utf8-2.1.0.tgz#0cfec5c8052d44a23e3aaa908104e8075f95dfd5"
+  resolved "http://registry.npmjs.org/utf8/-/utf8-2.1.0.tgz#0cfec5c8052d44a23e3aaa908104e8075f95dfd5"
 
 util-deprecate@~1.0.1:
   version "1.0.2"
@@ -9007,7 +9013,7 @@ write@^0.2.1:
 
 ws@0.8.0:
   version "0.8.0"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-0.8.0.tgz#ac60ebad312121d01e16cc3383d7ec67ad0f0f1f"
+  resolved "http://registry.npmjs.org/ws/-/ws-0.8.0.tgz#ac60ebad312121d01e16cc3383d7ec67ad0f0f1f"
   dependencies:
     options ">=0.0.5"
     ultron "1.0.x"
