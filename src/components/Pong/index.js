@@ -88,6 +88,12 @@ class Pong extends Component {
     this.setState({ position: info.x, paddleVars: { x: info.x, x1: info.x1, deltaX: info.deltaX } });
   }
 
+  onScore = () => {
+    this.props.onScore((score) => {
+      this.props.webrtc.shout('score', { score });
+    });
+  }
+
   handleBallMove() {
     const { ballPosition, paddleVars, width, height } = this.state;
     const { ballVector } = this.props;
@@ -115,6 +121,7 @@ class Pong extends Component {
           x: (window.innerWidth / 2) - 15,
           y: window.innerHeight - 300 }
         });
+        this.onScore();
         return;
       }
     }
@@ -130,7 +137,7 @@ class Pong extends Component {
 
   render() {
     const { position, width, ballPosition } = this.state;
-    const { renderBall, waitingForPlayer, roomName, score } = this.props;
+    const { renderBall, waitingForPlayer, roomName, score, firstPlayer } = this.props;
     return (
       <Container>
         <Separator />
@@ -138,7 +145,7 @@ class Pong extends Component {
           renderBall &&
           <Ball x={ballPosition.x} y={ballPosition.y} />
         }
-        <Score score={score} waiting={waitingForPlayer} room={roomName} />
+        <Score score={score} waiting={waitingForPlayer} room={roomName} firstPlayer={firstPlayer} />
         <Paddle width={width} position={position} onPaddleDrag={this.handlePaddleDrag} />
       </Container>
     );

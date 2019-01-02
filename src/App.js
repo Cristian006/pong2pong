@@ -71,6 +71,10 @@ class App extends Component {
         const newBallVector = { ...ballVector, x:  -ballVector.x, y: -ballVector.y };
         this.setState({ ballPosition: newBallPosition, ballVector: newBallVector, renderBall: true });
         break;
+      case 'score':
+        const { score } = payload;
+        this.setState({ score });
+        break;
       default:
         break;
     }
@@ -99,6 +103,23 @@ class App extends Component {
     });
   }
 
+  onScore = (callback) => {
+    const { firstPlayer, score } = this.state;
+    if (firstPlayer) {
+      this.setState({
+        score: { player1: score.player1, player2: score.player2 + 1 },
+      }, () => {
+        callback(this.state.score);
+      });
+    } else {
+      this.setState({
+        score: { player1: score.player1 + 1, player2: score.player2 },
+      }, () => {
+        callback(this.state.score);
+      });
+    }
+  }
+
   readyToPlay = (webrtc) => {
     const { firstPlayer } = this.state;
     this.setState({ waitingForPlayer: false, renderBall: firstPlayer });
@@ -121,7 +142,8 @@ class App extends Component {
       startGame,
       waitingForPlayer,
       score,
-      roomName
+      roomName,
+      firstPlayer
     } = this.state;
     return (
       <ThemeProvider theme={theme}>
@@ -148,9 +170,11 @@ class App extends Component {
                         onCrossSeparator={this.handleCrossSeparator}
                         setBallVector={this.handleSetBallVector}
                         onReadyJoinRoom={this.handleJoin}
+                        onScore={this.onScore}
                         waitingForPlayer={waitingForPlayer}
                         roomName={roomName}
                         score={score}
+                        firstPlayer={firstPlayer}
                       />
                     </LioWebRTC>
                   )
