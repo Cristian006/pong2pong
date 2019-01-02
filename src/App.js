@@ -67,7 +67,6 @@ class App extends Component {
         const { ballPosition, ballVector } = payload;
         const newBallPosition = { ...ballPosition, x: window.innerWidth - ballPosition.x };
         const newBallVector = { ...ballVector, x:  -ballVector.x, y: -ballVector.y };
-        console.log('NEW VECTOR', newBallVector);
         this.setState({ ballPosition: newBallPosition, ballVector: newBallVector, renderBall: true });
         break;
       default:

@@ -90,8 +90,8 @@ class Pong extends Component {
   handleBallMove() {
     const { ballPosition, paddleVars, width, height } = this.state;
     const { ballVector } = this.props;
-
     const { renderBall } = this.props;
+    if (!renderBall) return;
     // Handle wall collision
     if (ballPosition.x <= 0 || ballPosition.x >= width - 30) {
       this.props.setBallVector({ x: 0 - ballVector.x, y: ballVector.y });

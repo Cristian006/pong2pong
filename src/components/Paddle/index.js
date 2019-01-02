@@ -10,6 +10,8 @@ const Wrapper = styled.div`
   bottom: 0;
   left: ${props => props.pos}px;
   background-color: transparent;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-tap-highlight-color: transparent;
 `;
 
 class Paddle extends React.Component {
