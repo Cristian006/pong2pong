@@ -4,15 +4,21 @@ import styled from 'styled-components';
 const Container = styled.div`
   position: absolute;
   padding: 30px;
-  opacity: 0.6;
+  opacity: 0.5;
   color: #fff;
-  text-align: center;
   left: 0;
   right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
 `;
 
 const Text = styled.div`
-  font-size: 30px;
+  font-size: 56px;
   font-weight: bolder;
 `;
 
