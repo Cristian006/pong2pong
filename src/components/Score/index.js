@@ -15,6 +15,7 @@ const Container = styled.div`
   flex-direction: column;
   align-content: center;
   align-items: center;
+  user-select: none;
 `;
 
 const Text = styled.div`

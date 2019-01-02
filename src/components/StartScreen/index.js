@@ -32,7 +32,6 @@ const TextInput = styled.input`
   border: 3px solid #fff;
   border-radius: 4px;
   font-weight: 100;
-  font-family: 'Ubuntu';
   outline-style: none;
 `;
 
@@ -43,7 +42,6 @@ const Button = styled.button`
   background: #fff;
   color: #333;
   border-radius: 4px;
-  font-family: 'Ubuntu';
   cursor: pointer;
   outline-style: none;
   &:hover{

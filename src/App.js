@@ -3,7 +3,6 @@ import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { LioWebRTC } from 'react-liowebrtc';
 import Pong from './components/Pong';
 import StartScreen from './components/StartScreen';
-import './App.css';
 
 const theme = {
   fontColor: 'white',
@@ -17,17 +16,30 @@ const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css?family=Staatliches');
   html {
     box-sizing: border-box;
+    font-family: 'Staatliches', monospace;
+    margin: 0;
+    padding: 0;
   }
 
-  body: {
+  body {
+    margin: 0;
+    padding: 0;
     height: 100vh;
     width: 100vw;
     overflow: hidden;
-    font-family: 'Staatliches', monospace;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  * {
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+  }
+
+  *,
+  *::before,
+  *::after {
     box-sizing: inherit;
+    font-family: inherit;
   }
 
 `;
