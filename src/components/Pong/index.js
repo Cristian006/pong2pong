@@ -6,6 +6,7 @@ import Paddle from '../Paddle';
 import Ball from '../Ball';
 import Score from '../Score';
 import { randomColor } from '../../utils';
+import { hitWallSound, hitPaddleSound, scoreSound } from '../../utils/sound';
 
 const Container = styled.div`
   width: 100%;
@@ -30,10 +31,6 @@ class Pong extends Component {
     this.handlePaddleDrag = this.handlePaddleDrag.bind(this);
     this.handleBallMove = this.handleBallMove.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
-
-    this.hitWallSound = new Audio('/sounds/hit-wall.wav');
-    this.hitPaddleSound = new Audio('/sounds/hit-paddle.wav');
-    this.scoreSound = new Audio('/sounds/score.wav');
   }
 
   componentDidMount() {
@@ -98,7 +95,7 @@ class Pong extends Component {
     if (ballPosition.x <= 0 || ballPosition.x >= width - 30) {
       this.props.setBallVector({ x: 0 - ballVector.x, y: ballVector.y });
       this.setState({ ballPosition: { x: ballPosition.x - ballVector.x, y: ballPosition.y + ballVector.y }});
-      this.hitWallSound.play();
+      hitWallSound.play();
       return;
     }
     if (ballPosition.y <= 10) {
@@ -109,7 +106,7 @@ class Pong extends Component {
           x: ballPosition.x + ballVector.x + paddleVars.deltaX,
           y: ballPosition.y - ballVector.y
         }});
-        this.hitPaddleSound.play();
+        hitPaddleSound.play();
         const newBackground = randomColor();
         this.props.onChangeBackground(newBackground);
         this.props.webrtc.shout('bgColor', newBackground);
@@ -121,7 +118,7 @@ class Pong extends Component {
           x: (window.innerWidth / 2) - 15,
           y: window.innerHeight - 300 }
         });
-        this.scoreSound.play();
+        scoreSound.play();
         this.onScore();
         return;
       }

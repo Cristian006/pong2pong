@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { withTheme } from 'styled-components';
+import { hitPaddleSound, hitWallSound, scoreSound } from '../../utils/sound';
 
 const Wrapper = styled.div`
   margin-top: 20vh;
@@ -67,6 +68,11 @@ class StartScreen extends React.Component {
     if (roomName) {
       this.props.onJoinRoom(roomName);
       window.location.hash = `#${roomName}`;
+      // Need to play all 3 sounds on a click event so that mobile safari can
+      // play these sounds later without user input
+      hitPaddleSound.play();
+      hitWallSound.play();
+      scoreSound.play();
     }
   }
 

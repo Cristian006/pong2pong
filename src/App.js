@@ -4,6 +4,7 @@ import { LioWebRTC } from 'react-liowebrtc';
 import Pong from './components/Pong';
 import StartScreen from './components/StartScreen';
 import { getFontColor } from './utils';
+import { hitPaddleSound, scoreSound } from './utils/sound';
 
 const theme = {
   fontColor: '#ffffff',
@@ -90,9 +91,11 @@ class App extends Component {
       case 'score':
         const { score } = payload;
         this.setState({ score });
+        scoreSound.play();
         break;
       case 'bgColor':
         this.setState({ bgColor: payload, fontColor: getFontColor(payload) });
+        hitPaddleSound.play();
         break;
       default:
         break;
@@ -144,6 +147,7 @@ class App extends Component {
       waitingForPlayer: true,
       ballPosition: null,
       renderBall: false,
+      firstPlayer: true,
       ballVector: { x: 0, y: -10 }
     });
   }
