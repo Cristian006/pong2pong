@@ -5,6 +5,7 @@ import Separator from '../Separator';
 import Paddle from '../Paddle';
 import Ball from '../Ball';
 import Score from '../Score';
+import { getColor } from '../../utils';
 
 const Container = styled.div`
   width: 100%;
@@ -189,6 +190,9 @@ class Pong extends Component {
           x: ballPosition.x + ballVector.x + paddleVars.deltaX,
           y: ballPosition.y - ballVector.y
         }});
+        const newBackground = getColor();
+        this.props.onChangeBackground(newBackground);
+        this.props.webrtc.shout('bgColor', newBackground);
         return;
       } else {
         // Handle ball fall-through
@@ -234,16 +238,24 @@ class Pong extends Component {
 
   render() {
     const { position, ballPosition } = this.state;
-    const { renderBall, waitingForPlayer, roomName, score, firstPlayer } = this.props;
+    const {
+      renderBall, waitingForPlayer, roomName, score, firstPlayer, fontColor
+    } = this.props;
     return (
       <Container onMouseMove={this.handleHover} onTouchMove={this.handleTouch}>
-        <Separator />
+        <Separator fontColor={fontColor} />
         {
           renderBall &&
-          <Ball x={ballPosition.x} y={ballPosition.y} />
+          <Ball x={ballPosition.x} y={ballPosition.y} fontColor={fontColor} />
         }
-        <Score score={score} waiting={waitingForPlayer} room={roomName} firstPlayer={firstPlayer} />
-        <Paddle position={position} />
+        <Score
+          score={score}
+          waiting={waitingForPlayer}
+          room={roomName}
+          firstPlayer={firstPlayer}
+          fontColor={fontColor}
+        />
+        <Paddle position={position} fontColor={fontColor} />
       </Container>
     );
   }

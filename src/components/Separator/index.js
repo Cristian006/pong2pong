@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 const Separator = styled.div`
   border-style: dashed;
-  border-color: #fff;
+  border-color: ${({fontColor}) => fontColor};
   border-spacing: 1px;
   border-width: 8px;
   position: absolute;

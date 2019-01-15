@@ -8,7 +8,7 @@ const Wrapper = styled.div.attrs({
 })`
   width: ${({theme}) => theme.paddleWidth}px;
   height: 30vh;
-  border-bottom: 4px solid #fff;
+  border-bottom: 4px solid ${({fontColor}) => fontColor};
   position: absolute;
   bottom: 0;
   background-color: transparent;
@@ -18,9 +18,9 @@ const Wrapper = styled.div.attrs({
 
 class Paddle extends React.Component {
   render() {
-    const { position } = this.props;
+    const { position, fontColor } = this.props;
     return (
-      <Wrapper pos={position} />
+      <Wrapper pos={position} fontColor={fontColor} />
     );
   }
 }

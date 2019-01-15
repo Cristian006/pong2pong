@@ -5,6 +5,7 @@
   "dependencies": {
     "liowebrtc": "^0.2.12",
     "polished": "^2.3.1",
+    "randomcolor": "^0.5.3",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-liowebrtc": "^1.2.4",

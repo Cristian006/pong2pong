@@ -11,14 +11,14 @@ const Wrapper = styled.div.attrs({
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background-color: ${props => props.theme.fontColor};
+  background-color: ${({fontColor}) => fontColor};
 `;
 
 class Ball extends React.Component {
   render() {
-    const { x, y } = this.props;
+    const { x, y, fontColor } = this.props;
     return (
-      <Wrapper x={x} y={y} />
+      <Wrapper x={x} y={y} fontColor={fontColor} />
     );
   }
 }

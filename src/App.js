@@ -3,9 +3,10 @@ import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { LioWebRTC } from 'react-liowebrtc';
 import Pong from './components/Pong';
 import StartScreen from './components/StartScreen';
+import { getFontColor } from './utils';
 
 const theme = {
-  fontColor: 'white',
+  fontColor: '#ffffff',
   ballLeft: (window.innerWidth / 2) - 15,
   ballBottom: window.innerHeight - 300,
   backgroundColor: '#282c34',
@@ -49,7 +50,7 @@ const Container = styled.div`
   height: 100vh;
   width: 100vw;
   overflow: hidden;
-  background: ${({theme}) => theme.backgroundColor};
+  background: ${({bgColor}) => bgColor};
 `;
 
 const lioWebRTCOptions = {
@@ -69,6 +70,8 @@ class App extends Component {
       waitingForPlayer: true,
       firstPlayer: true,
       score: { player1: 0, player2: 0 },
+      bgColor: theme.backgroundColor,
+      fontColor: theme.fontColor
     };
   }
 
@@ -87,6 +90,9 @@ class App extends Component {
       case 'score':
         const { score } = payload;
         this.setState({ score });
+        break;
+      case 'bgColor':
+        this.setState({ bgColor: payload, fontColor: getFontColor(payload) });
         break;
       default:
         break;
@@ -147,6 +153,10 @@ class App extends Component {
     });
   }
 
+  handleChangeBackground = (color) => {
+    this.setState({ bgColor: color, fontColor: getFontColor(color) });
+  }
+
   render() {
     const {
       ballPosition,
@@ -156,13 +166,15 @@ class App extends Component {
       waitingForPlayer,
       score,
       roomName,
-      firstPlayer
+      firstPlayer,
+      bgColor,
+      fontColor
     } = this.state;
     return (
       <ThemeProvider theme={theme}>
         <Fragment>
           <GlobalStyle />
-            <Container>
+            <Container bgColor={bgColor}>
                 {
                   startGame ? (
                     <LioWebRTC
@@ -188,6 +200,8 @@ class App extends Component {
                         roomName={roomName}
                         score={score}
                         firstPlayer={firstPlayer}
+                        onChangeBackground={this.handleChangeBackground}
+                        fontColor={fontColor}
                       />
                     </LioWebRTC>
                   )
