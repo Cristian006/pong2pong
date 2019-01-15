@@ -99,11 +99,6 @@ class App extends Component {
     }
   }
 
-  handleMoveBall = (vector) => {
-    const { ballLeft, ballBottom } = this.state;
-    this.setState({ theme: { ballLeft: ballLeft + vector.x, ballBottom: ballBottom + vector.y } });
-  }
-
   handleCrossSeparator = () => this.setState({ renderBall: false });
 
   handleSetBallVector = (vector) => this.setState({ ballVector: vector });
