@@ -5,7 +5,6 @@ import Separator from '../Separator';
 import Paddle from '../Paddle';
 import Ball from '../Ball';
 import Score from '../Score';
-import Wait from '../Wait';
 
 const Container = styled.div`
   width: 100%;
@@ -23,6 +22,7 @@ class Pong extends Component {
       width: window.innerWidth,
       height: window.innerHeight,
       moving: 0,
+      cX: 0,
       paddleVars: { x: this.startCenter, x1: this.startCenter + props.theme.paddleWidth, deltaX: 0 }
     }
     this.handleResize = this.handleResize.bind(this);
@@ -71,7 +71,6 @@ class Pong extends Component {
     const width = window.innerWidth;
     return (width / 2) - (this.props.theme.paddleWidth / 2);
   }
-
   startMoving(direction=0) {
     if (direction === 0) {
       // stop moving paddle
@@ -182,7 +181,7 @@ class Pong extends Component {
       return;
     }
     if (ballPosition.y <= 10) {
-      console.log('COLLISION', paddleVars, ballPosition);
+      // console.log('COLLISION', paddleVars, ballPosition);
       // Ball x coord is between paddle x0 and x1
       if (paddleVars.x <= ballPosition.x + 30 && paddleVars.x1 >= ballPosition.x) {
         this.props.setBallVector({ x: ballVector.x + paddleVars.deltaX, y: -ballVector.y });
@@ -212,18 +211,39 @@ class Pong extends Component {
     });
   }
 
+  handleHover = (evt) => {
+    const { paddleWidth } = this.props.theme;
+    const { width } = this.state;
+    const { clientX, movementX } = evt;
+    let xPos = clientX - paddleWidth/2;
+    if (xPos < 0) xPos = 0;
+    if (xPos > width - paddleWidth) xPos = width - paddleWidth;
+    this.handlePaddleDrag({ x: xPos, x1: xPos + paddleWidth, deltaX: movementX })
+  }
+
+  handleTouch = (evt) => {
+    const { paddleWidth } = this.props.theme;
+    const { width, cX } = this.state;
+    const { clientX } = evt.touches[0];
+    let xPos = clientX - paddleWidth/2;
+    if (xPos < 0) xPos = 0;
+    if (xPos > width - paddleWidth) xPos = width - paddleWidth;
+    this.handlePaddleDrag({ x: xPos, x1: xPos + paddleWidth, deltaX: clientX - cX });
+    this.setState({ cX: clientX });
+  }
+
   render() {
-    const { position, width, ballPosition } = this.state;
+    const { position, ballPosition } = this.state;
     const { renderBall, waitingForPlayer, roomName, score, firstPlayer } = this.props;
     return (
-      <Container>
+      <Container onMouseMove={this.handleHover} onTouchMove={this.handleTouch}>
         <Separator />
         {
           renderBall &&
           <Ball x={ballPosition.x} y={ballPosition.y} />
         }
         <Score score={score} waiting={waitingForPlayer} room={roomName} firstPlayer={firstPlayer} />
-        <Paddle width={width} position={position} onPaddleDrag={this.handlePaddleDrag} />
+        <Paddle position={position} />
       </Container>
     );
   }

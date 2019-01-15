@@ -35,7 +35,7 @@ class Score extends Component {
     if (waiting) {
       return (
         <Container>
-          <WaitText>waiting for player to join room</WaitText>
+          <WaitText>waiting for a player to join the room...</WaitText>
           <WaitText>{room}</WaitText>
         </Container>
       )

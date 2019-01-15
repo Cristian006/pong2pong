@@ -1,6 +1,5 @@
 import React from 'react';
 import styled, { withTheme } from 'styled-components';
-import Draggable from 'react-draggable';
 
 const Wrapper = styled.div.attrs({
   style: ({ pos }) => ({
@@ -18,26 +17,10 @@ const Wrapper = styled.div.attrs({
 `;
 
 class Paddle extends React.Component {
-  handleDrag = (evt, data) => {
-    const { width, position } = this.props;
-    const { paddleWidth } = this.props.theme;
-    const x = data.x >= width - paddleWidth ? position : data.x + (width/2) - (paddleWidth/2);
-    const x1 = data.x >= width - paddleWidth ? position + paddleWidth: data.x + (width/2) - (paddleWidth/2) + paddleWidth;
-    this.props.onPaddleDrag({ x, x1,  deltaX: data.deltaX });
-  }
-
   render() {
-    const { position, width } = this.props;
-    const { paddleWidth } = this.props.theme;
-    // console.log(position);
+    const { position } = this.props;
     return (
-      <Draggable
-        axis="x"
-        bounds={{ left: -position, right: (width/2)/2 - paddleWidth/4 }}
-        onDrag={this.handleDrag}
-      >
-        <Wrapper pos={position} />
-      </Draggable>
+      <Wrapper pos={position} />
     );
   }
 }

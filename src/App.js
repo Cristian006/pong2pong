@@ -9,7 +9,7 @@ const theme = {
   ballLeft: (window.innerWidth / 2) - 15,
   ballBottom: window.innerHeight - 300,
   backgroundColor: '#282c34',
-  paddleWidth: 200,
+  paddleWidth: window.innerWidth < 500 ? 75 : 200,
 };
 
 const GlobalStyle = createGlobalStyle`
@@ -24,7 +24,8 @@ const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
     padding: 0;
-    height: 100vh;
+    height: ${navigator.platform === 'iPhone' ? '88vh' : '100vh'};
+    position: fixed;
     width: 100vw;
     overflow: hidden;
     -webkit-font-smoothing: antialiased;
@@ -66,7 +67,7 @@ class App extends Component {
       renderBall: false,
       startGame: false,
       waitingForPlayer: true,
-      firstPlayer: true, 
+      firstPlayer: true,
       score: { player1: 0, player2: 0 },
     };
   }
@@ -174,8 +175,8 @@ class App extends Component {
                     >
                       <Pong
                         ballPosition={{
-                          x: ballPosition ? ballPosition : theme.ballLeft,
-                          y: ballPosition ? ballPosition : theme.ballBottom
+                          x: ballPosition ? ballPosition.x : theme.ballLeft,
+                          y: ballPosition ? ballPosition.y : theme.ballBottom
                         }}
                         ballVector={ballVector}
                         renderBall={renderBall}
