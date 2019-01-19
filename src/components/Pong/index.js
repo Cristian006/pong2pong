@@ -23,7 +23,6 @@ class Pong extends Component {
       speed: 20,
       width: window.innerWidth,
       height: window.innerHeight,
-      moving: 0,
       touchX: 0,
       paddleVars: { x: this.startCenter, x1: this.startCenter + props.theme.paddleWidth, deltaX: 0 }
     }
@@ -134,25 +133,25 @@ class Pong extends Component {
     });
   }
 
-  handleHover = (evt) => {
+  movePaddle = (clientX, deltaX, setTouchX = false) => {
     const { paddleWidth } = this.props.theme;
     const { width } = this.state;
-    const { clientX, movementX } = evt;
     let xPos = clientX - paddleWidth/2;
     if (xPos < 0) xPos = 0;
     if (xPos > width - paddleWidth) xPos = width - paddleWidth;
-    this.handlePaddleDrag({ x: xPos, x1: xPos + paddleWidth, deltaX: movementX })
+    this.handlePaddleDrag({ x: xPos, x1: xPos + paddleWidth, deltaX });
+    if (setTouchX) this.setState({ touchX: clientX });
+  }
+
+  handleHover = (evt) => {
+    const { clientX, movementX } = evt;
+    this.movePaddle(clientX, movementX);
   }
 
   handleTouch = (evt) => {
-    const { paddleWidth } = this.props.theme;
-    const { width, touchX } = this.state;
+    const { touchX } = this.state;
     const { clientX } = evt.touches[0];
-    let xPos = clientX - paddleWidth/2;
-    if (xPos < 0) xPos = 0;
-    if (xPos > width - paddleWidth) xPos = width - paddleWidth;
-    this.handlePaddleDrag({ x: xPos, x1: xPos + paddleWidth, deltaX: clientX - touchX });
-    this.setState({ touchX: clientX });
+    this.movePaddle(clientX, clientX - touchX, true);
   }
 
   render() {
