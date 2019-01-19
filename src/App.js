@@ -3,13 +3,15 @@ import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { LioWebRTC } from 'react-liowebrtc';
 import Pong from './components/Pong';
 import StartScreen from './components/StartScreen';
+import { getFontColor } from './utils';
+import { hitPaddleSound, scoreSound } from './utils/sound';
 
 const theme = {
-  fontColor: 'white',
+  fontColor: '#ffffff',
   ballLeft: (window.innerWidth / 2) - 15,
   ballBottom: window.innerHeight - 300,
   backgroundColor: '#282c34',
-  paddleWidth: 200,
+  paddleWidth: window.innerWidth < 500 ? 75 : 200,
 };
 
 const GlobalStyle = createGlobalStyle`
@@ -24,7 +26,8 @@ const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
     padding: 0;
-    height: 100vh;
+    height: ${navigator.platform === 'iPhone' ? '88vh' : '100vh'};
+    position: fixed;
     width: 100vw;
     overflow: hidden;
     -webkit-font-smoothing: antialiased;
@@ -48,8 +51,8 @@ const Container = styled.div`
   height: 100vh;
   width: 100vw;
   overflow: hidden;
-  color: ${props => props.fontColor};
-  background: ${props => props.bgColor};
+  color: ${({fontColor}) => fontColor};
+  background: ${({bgColor}) => bgColor};
 `;
 
 const lioWebRTCOptions = {
@@ -71,6 +74,8 @@ class App extends Component {
       waitingForPlayer: true,
       firstPlayer: true,
       score: { player1: 0, player2: 0 },
+      bgColor: theme.backgroundColor,
+      fontColor: theme.fontColor
     };
   }
 
@@ -97,15 +102,15 @@ class App extends Component {
       case 'score':
         const { score } = payload;
         this.setState({ score });
+        scoreSound.play();
+        break;
+      case 'bgColor':
+        this.setState({ bgColor: payload, fontColor: getFontColor(payload) });
+        hitPaddleSound.play();
         break;
       default:
         break;
     }
-  }
-
-  handleMoveBall = (vector) => {
-    const { ballLeft, ballBottom } = this.state;
-    this.setState({ theme: { ballLeft: ballLeft + vector.x, ballBottom: ballBottom + vector.y } });
   }
 
   handleCrossSeparator = () => this.setState({ renderBall: false });
@@ -153,16 +158,17 @@ class App extends Component {
       waitingForPlayer: true,
       ballPosition: null,
       renderBall: false,
+      firstPlayer: true,
       ballVector: { x: 0, y: -10 }
     });
   }
 
   changeColor = (color, fontColor) => {
-  this.setState({
-    bgColor: color,
-    fontColor: fontColor
-  })
-};
+    this.setState({
+      bgColor: color,
+      fontColor: fontColor
+    })
+  };
 
   render() {
     const {
@@ -175,7 +181,9 @@ class App extends Component {
       waitingForPlayer,
       score,
       roomName,
-      firstPlayer
+      firstPlayer,
+      bgColor,
+      fontColor
     } = this.state;
     return (
       <ThemeProvider theme={theme}>
@@ -198,8 +206,8 @@ class App extends Component {
                       <Pong
                         onChangeColor={this.changeColor}
                         ballPosition={{
-                          x: ballPosition ? ballPosition : theme.ballLeft,
-                          y: ballPosition ? ballPosition : theme.ballBottom
+                          x: ballPosition ? ballPosition.x : theme.ballLeft,
+                          y: ballPosition ? ballPosition.y : theme.ballBottom
                         }}
                         ballVector={ballVector}
                         renderBall={renderBall}
@@ -211,6 +219,8 @@ class App extends Component {
                         roomName={roomName}
                         score={score}
                         firstPlayer={firstPlayer}
+                        onChangeBackground={this.handleChangeBackground}
+                        fontColor={fontColor}
                       />
                     </LioWebRTC>
                   )

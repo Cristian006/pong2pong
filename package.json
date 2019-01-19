@@ -5,9 +5,9 @@
   "dependencies": {
     "liowebrtc": "^0.2.12",
     "polished": "^2.3.1",
+    "randomcolor": "^0.5.3",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
-    "react-draggable": "^3.1.1",
     "react-liowebrtc": "^1.2.4",
     "react-scripts": "2.1.2",
     "styled-components": "^4.1.3"

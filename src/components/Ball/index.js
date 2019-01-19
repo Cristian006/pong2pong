@@ -16,9 +16,9 @@ const Wrapper = styled.div.attrs({
 
 class Ball extends React.Component {
   render() {
-    const { x, y } = this.props;
+    const { x, y, fontColor } = this.props;
     return (
-      <Wrapper x={x} y={y} />
+      <Wrapper x={x} y={y} fontColor={fontColor} />
     );
   }
 }

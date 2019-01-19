@@ -30,18 +30,18 @@ const WaitText = styled.h1`
 
 class Score extends Component {
   render() {
-    const { score, waiting, room, firstPlayer } = this.props;
+    const { score, waiting, room, firstPlayer, fontColor } = this.props;
     const { player1, player2 } = score;
     if (waiting) {
       return (
-        <Container>
-          <WaitText>waiting for player to join room</WaitText>
+        <Container fontColor={fontColor}>
+          <WaitText>waiting for a player to join the room...</WaitText>
           <WaitText>{room}</WaitText>
         </Container>
       )
     }
     return (
-      <Container>
+      <Container fontColor={fontColor}>
         <Text>{firstPlayer ? `${player1} - ${player2}` : `${player2} - ${player1}`}</Text>
       </Container>
     );

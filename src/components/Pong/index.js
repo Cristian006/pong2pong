@@ -13,6 +13,7 @@ import {
   getFontColor,
   setColor
 } from '../../utils';
+import { hitWallSound, hitPaddleSound, scoreSound } from '../../utils/sound';
 
 const Container = styled.div`
   width: 100%;
@@ -30,31 +31,23 @@ class Pong extends Component {
       speed: 20,
       width: window.innerWidth,
       height: window.innerHeight,
-      moving: 0,
+      touchX: 0,
       paddleVars: { x: this.startCenter, x1: this.startCenter + props.theme.paddleWidth, deltaX: 0 }
     }
     this.handleResize = this.handleResize.bind(this);
-    this.movePaddle = this.movePaddle.bind(this);
     this.handlePaddleDrag = this.handlePaddleDrag.bind(this);
     this.handleBallMove = this.handleBallMove.bind(this);
-    this.handleKeyDown = this.handleKeyDown.bind(this);
-    this.handleKeyUp = this.handleKeyUp.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
-    this.startMoving = this.startMoving.bind(this);
   }
 
   componentDidMount() {
     window.addEventListener('keypress', this.handleKeyPress);
-    window.addEventListener('keydown', this.handleKeyDown);
-    window.addEventListener('keyup', this.handleKeyUp);
     window.addEventListener('resize', this.handleResize);
     this.applyGravity(true);
   }
 
   componentWillUnmount() {
     window.removeEventListener('keypress', this.handleKeyPress);
-    window.removeEventListener('keydown', this.handleKeyDown);
-    window.removeEventListener('keyup', this.handleKeyUp);
     window.removeEventListener('resize', this.handleResize);
     this.applyGravity(false);
   }
@@ -80,34 +73,6 @@ class Pong extends Component {
     return (width / 2) - (this.props.theme.paddleWidth / 2);
   }
 
-  startMoving(direction=0) {
-    if (direction === 0) {
-      // stop moving paddle
-      this.setState({ moving: direction }, () => {
-        clearInterval(this.movingPaddle);
-        this.movingPaddle = null;
-      });
-      return;
-    }
-
-    if (this.state.moving !== direction) {
-      // we are switching directions!
-      clearInterval(this.movingPaddle);
-      this.setState({
-        moving: direction,
-      }, () => {
-        this.movingPaddle = setInterval(() => { this.movePaddle(direction) }, 10);
-      });
-    } else {
-      // we were not moving before -> start moving
-      this.setState({
-        moving: direction,
-      }, () => {
-        this.movingPaddle = setInterval(() => { this.movePaddle(direction) }, 10);
-      });
-    }
-  }
-
   handleKeyPress (e) {
     switch (e.keyCode) {
       case 32:
@@ -116,56 +81,6 @@ class Pong extends Component {
       default:
         break;
     }
-  }
-
-  handleKeyDown (e) {
-    switch (e.keyCode) {
-      case 65:
-      case 37:
-        //left
-        if (this.state.moving >= 0) {
-          this.startMoving(-1);
-        }
-        break;
-      case 68:
-      case 39:
-        //right
-        if (this.state.moving <= 0) {
-          this.startMoving(1);
-        }
-        break;
-      default:
-        break;
-    }
-  }
-
-  handleKeyUp (e) {
-    // stop moving
-    switch (e.keyCode) {
-      case 65:
-      case 37:
-        //left
-        this.startMoving(0);
-        break;
-      case 68:
-      case 39:
-        //right
-        this.startMoving(0);
-        break;
-      default:
-        break;
-    }
-  }
-
-  movePaddle(direction) {
-    // move paddle postion
-    const { width, speed } = this.state;
-    const { paddleWidth } = this.props.theme;
-    const delta = speed * direction;
-    // console.log(delta, width, paddleWidth);
-    this.setState({
-      position: direction > 0 ? Math.min(this.state.position + delta, width - paddleWidth) : Math.max(this.state.position + delta, 0)
-    });
   }
 
   handlePaddleDrag(info) {
@@ -187,6 +102,7 @@ class Pong extends Component {
     if (ballPosition.x <= 0 || ballPosition.x >= width - 30) {
       this.props.setBallVector({ x: 0 - ballVector.x, y: ballVector.y });
       this.setState({ ballPosition: { x: ballPosition.x - ballVector.x, y: ballPosition.y + ballVector.y }});
+      hitWallSound.play();
       return;
     }
     if (ballPosition.y <= 10) {
@@ -207,6 +123,7 @@ class Pong extends Component {
         this.props.onChangeColor(color, fontColor);
         this.props.webrtc.shout('bgColor', { bgColor: color });
         this.props.webrtc.shout('fontColor', { fontColor: fontColor });
+        hitPaddleSound.play();
         return;
       } else {
         // Handle ball fall-through
@@ -215,10 +132,12 @@ class Pong extends Component {
           x: (window.innerWidth / 2) - 15,
           y: window.innerHeight - 300 }
         });
+        scoreSound.play();
         this.onScore();
         return;
       }
     }
+    // Handle ball cross separator
     if (ballPosition.y >= height - 30 && renderBall && ballVector.y > 0) {
       this.props.onCrossSeparator();
       this.props.webrtc.shout('crossSeparator', { ballPosition, ballVector });
@@ -229,18 +148,47 @@ class Pong extends Component {
     });
   }
 
+  movePaddle = (clientX, deltaX, setTouchX = false) => {
+    const { paddleWidth } = this.props.theme;
+    const { width } = this.state;
+    let xPos = clientX - paddleWidth/2;
+    if (xPos < 0) xPos = 0;
+    if (xPos > width - paddleWidth) xPos = width - paddleWidth;
+    this.handlePaddleDrag({ x: xPos, x1: xPos + paddleWidth, deltaX });
+    if (setTouchX) this.setState({ touchX: clientX });
+  }
+
+  handleHover = (evt) => {
+    const { clientX, movementX } = evt;
+    this.movePaddle(clientX, movementX);
+  }
+
+  handleTouch = (evt) => {
+    const { touchX } = this.state;
+    const { clientX } = evt.touches[0];
+    this.movePaddle(clientX, clientX - touchX, true);
+  }
+
   render() {
-    const { position, width, ballPosition } = this.state;
-    const { renderBall, waitingForPlayer, roomName, score, firstPlayer } = this.props;
+    const { position, ballPosition } = this.state;
+    const {
+      renderBall, waitingForPlayer, roomName, score, firstPlayer, fontColor
+    } = this.props;
     return (
-      <Container>
-        <Separator />
+      <Container onMouseMove={this.handleHover} onTouchMove={this.handleTouch}>
+        <Separator fontColor={fontColor} />
         {
           renderBall &&
-          <Ball x={ballPosition.x} y={ballPosition.y} />
+          <Ball x={ballPosition.x} y={ballPosition.y} fontColor={fontColor} />
         }
-        <Score score={score} waiting={waitingForPlayer} room={roomName} firstPlayer={firstPlayer} />
-        <Paddle width={width} position={position} onPaddleDrag={this.handlePaddleDrag} />
+        <Score
+          score={score}
+          waiting={waitingForPlayer}
+          room={roomName}
+          firstPlayer={firstPlayer}
+          fontColor={fontColor}
+        />
+        <Paddle position={position} fontColor={fontColor} />
       </Container>
     );
   }
