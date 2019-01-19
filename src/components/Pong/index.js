@@ -6,10 +6,18 @@ import Paddle from '../Paddle';
 import Ball from '../Ball';
 import Score from '../Score';
 import Wait from '../Wait';
+import {
+  valuesRGB,
+  getRGB,
+  getLuminance,
+  getFontColor,
+  setColor
+} from '../../utils';
 
 const Container = styled.div`
   width: 100%;
   height: 100%;
+  color: inherit;
 `;
 
 class Pong extends Component {
@@ -182,7 +190,6 @@ class Pong extends Component {
       return;
     }
     if (ballPosition.y <= 10) {
-      console.log('COLLISION', paddleVars, ballPosition);
       // Ball x coord is between paddle x0 and x1
       if (paddleVars.x <= ballPosition.x + 30 && paddleVars.x1 >= ballPosition.x) {
         this.props.setBallVector({ x: ballVector.x + paddleVars.deltaX, y: -ballVector.y });
@@ -190,6 +197,16 @@ class Pong extends Component {
           x: ballPosition.x + ballVector.x + paddleVars.deltaX,
           y: ballPosition.y - ballVector.y
         }});
+        const rgbValues = valuesRGB();
+        const colorValues = getRGB(rgbValues);
+        const color = setColor(rgbValues);
+        console.log(color);
+        const luminance = getLuminance(colorValues);
+        const fontColor = getFontColor(luminance);
+        console.log(fontColor);
+        this.props.onChangeColor(color, fontColor);
+        this.props.webrtc.shout('bgColor', { bgColor: color });
+        this.props.webrtc.shout('fontColor', { fontColor: fontColor });
         return;
       } else {
         // Handle ball fall-through

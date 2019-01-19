@@ -5,7 +5,7 @@ const Container = styled.div`
   position: absolute;
   padding: 30px;
   opacity: 0.5;
-  color: #fff;
+  color: currentColor;
   left: 0;
   right: 0;
   top: 0;

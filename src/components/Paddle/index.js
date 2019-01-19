@@ -9,7 +9,7 @@ const Wrapper = styled.div.attrs({
 })`
   width: ${({theme}) => theme.paddleWidth}px;
   height: 30vh;
-  border-bottom: 4px solid #fff;
+  border-bottom: 4px solid currentColor;
   position: absolute;
   bottom: 0;
   background-color: transparent;

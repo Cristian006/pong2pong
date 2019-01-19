@@ -48,7 +48,8 @@ const Container = styled.div`
   height: 100vh;
   width: 100vw;
   overflow: hidden;
-  background: ${({theme}) => theme.backgroundColor};
+  color: ${props => props.fontColor};
+  background: ${props => props.bgColor};
 `;
 
 const lioWebRTCOptions = {
@@ -60,13 +61,15 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      bgColor: '#282c34',
+      fontColor: '#fff',
       roomName: null,
       ballPosition: null,
       ballVector: { x: 0, y: -10 },
       renderBall: false,
       startGame: false,
       waitingForPlayer: true,
-      firstPlayer: true, 
+      firstPlayer: true,
       score: { player1: 0, player2: 0 },
     };
   }
@@ -82,6 +85,14 @@ class App extends Component {
         const newBallPosition = { ...ballPosition, x: window.innerWidth - ballPosition.x };
         const newBallVector = { ...ballVector, x:  -ballVector.x, y: -ballVector.y };
         this.setState({ ballPosition: newBallPosition, ballVector: newBallVector, renderBall: true });
+        break;
+        case 'bgColor':
+      const { bgColor } = payload;
+        this.setState({ bgColor });
+        break;
+      case 'fontColor':
+        const { fontColor } = payload;
+        this.setState({ fontColor });
         break;
       case 'score':
         const { score } = payload;
@@ -146,8 +157,17 @@ class App extends Component {
     });
   }
 
+  changeColor = (color, fontColor) => {
+  this.setState({
+    bgColor: color,
+    fontColor: fontColor
+  })
+};
+
   render() {
     const {
+      fontColor,
+      bgColor,
       ballPosition,
       ballVector,
       renderBall,
@@ -161,7 +181,10 @@ class App extends Component {
       <ThemeProvider theme={theme}>
         <Fragment>
           <GlobalStyle />
-            <Container>
+            <Container
+              bgColor={bgColor}
+              fontColor={fontColor}
+              >
                 {
                   startGame ? (
                     <LioWebRTC
@@ -173,6 +196,7 @@ class App extends Component {
                       onRemovedPeer={this.handlePeerQuit}
                     >
                       <Pong
+                        onChangeColor={this.changeColor}
                         ballPosition={{
                           x: ballPosition ? ballPosition : theme.ballLeft,
                           y: ballPosition ? ballPosition : theme.ballBottom
