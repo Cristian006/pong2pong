@@ -182,8 +182,6 @@ class App extends Component {
       score,
       roomName,
       firstPlayer,
-      bgColor,
-      fontColor
     } = this.state;
     return (
       <ThemeProvider theme={theme}>
