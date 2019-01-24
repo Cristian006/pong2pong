@@ -67,8 +67,6 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      bgColor: '#282c34',
-      fontColor: '#fff',
       roomName: null,
       ballPosition: null,
       ballVector: { x: 0, y: -10 },
