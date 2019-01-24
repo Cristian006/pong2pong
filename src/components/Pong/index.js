@@ -5,12 +5,18 @@ import Separator from '../Separator';
 import Paddle from '../Paddle';
 import Ball from '../Ball';
 import Score from '../Score';
-import { randomColor } from '../../utils';
+//import Wait from '../Wait';
+import {
+  generateRGBValues,
+  getFontColor,
+  formatColorObject
+} from '../../utils';
 import { hitWallSound, hitPaddleSound, scoreSound } from '../../utils/sound';
 
 const Container = styled.div`
   width: 100%;
   height: 100%;
+  color: inherit;
 `;
 
 class Pong extends Component {
@@ -105,10 +111,13 @@ class Pong extends Component {
           x: ballPosition.x + ballVector.x + paddleVars.deltaX,
           y: ballPosition.y - ballVector.y
         }});
+        const rgbValues = generateRGBValues(); // sets first, second, and third value for rgb, placeses first second and third into rgb object
+        const color = formatColorObject(rgbValues); // creates rgb color
+        const fontColor = getFontColor(color); // takes luminance and gets fontColor
+        this.props.onChangeColor(color, fontColor);
+        this.props.webrtc.shout('rgb', { rgb: rgbValues }); // sends first second and third value
+        // this.props.webrtc.shout('bgColor', { bgColor: color });
         hitPaddleSound.play();
-        const newBackground = randomColor();
-        this.props.onChangeBackground(newBackground);
-        this.props.webrtc.shout('bgColor', newBackground);
         return;
       } else {
         // Handle ball fall-through

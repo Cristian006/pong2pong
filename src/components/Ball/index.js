@@ -11,7 +11,7 @@ const Wrapper = styled.div.attrs({
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background-color: ${({fontColor}) => fontColor};
+  background-color: currentColor;
 `;
 
 class Ball extends React.Component {

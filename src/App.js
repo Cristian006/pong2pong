@@ -3,8 +3,11 @@ import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { LioWebRTC } from 'react-liowebrtc';
 import Pong from './components/Pong';
 import StartScreen from './components/StartScreen';
-import { getFontColor } from './utils';
 import { hitPaddleSound, scoreSound } from './utils/sound';
+import {
+  getFontColor,
+  formatColorObject
+} from './utils';
 
 const theme = {
   fontColor: '#ffffff',
@@ -51,6 +54,7 @@ const Container = styled.div`
   height: 100vh;
   width: 100vw;
   overflow: hidden;
+  color: ${({fontColor}) => fontColor};
   background: ${({bgColor}) => bgColor};
 `;
 
@@ -88,15 +92,23 @@ class App extends Component {
         const newBallVector = { ...ballVector, x:  -ballVector.x, y: -ballVector.y };
         this.setState({ ballPosition: newBallPosition, ballVector: newBallVector, renderBall: true });
         break;
+      case 'rgb':
+        const { rgb } = payload; // recieves rgb object
+        console.log(rgb);
+        const bgColor = formatColorObject(rgb); // returns rgb string
+        this.setState({ bgColor: bgColor, fontColor: getFontColor(bgColor) });
+        hitPaddleSound.play();
+        break;
       case 'score':
         const { score } = payload;
         this.setState({ score });
         scoreSound.play();
         break;
-      case 'bgColor':
+      /*case 'bgColor':
         this.setState({ bgColor: payload, fontColor: getFontColor(payload) });
         hitPaddleSound.play();
         break;
+        */
       default:
         break;
     }
@@ -152,12 +164,17 @@ class App extends Component {
     });
   }
 
-  handleChangeBackground = (color) => {
-    this.setState({ bgColor: color, fontColor: getFontColor(color) });
-  }
+  changeColor = (color, fontColor) => {
+    this.setState({
+      bgColor: color,
+      fontColor: fontColor
+    })
+  };
 
   render() {
     const {
+      fontColor,
+      bgColor,
       ballPosition,
       ballVector,
       renderBall,
@@ -166,14 +183,15 @@ class App extends Component {
       score,
       roomName,
       firstPlayer,
-      bgColor,
-      fontColor
     } = this.state;
     return (
       <ThemeProvider theme={theme}>
         <Fragment>
           <GlobalStyle />
-            <Container bgColor={bgColor}>
+            <Container
+              bgColor={bgColor}
+              fontColor={fontColor}
+              >
                 {
                   startGame ? (
                     <LioWebRTC
@@ -185,6 +203,7 @@ class App extends Component {
                       onRemovedPeer={this.handlePeerQuit}
                     >
                       <Pong
+                        onChangeColor={this.changeColor}
                         ballPosition={{
                           x: ballPosition ? ballPosition.x : theme.ballLeft,
                           y: ballPosition ? ballPosition.y : theme.ballBottom
