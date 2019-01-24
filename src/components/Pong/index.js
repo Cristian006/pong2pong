@@ -5,13 +5,13 @@ import Separator from '../Separator';
 import Paddle from '../Paddle';
 import Ball from '../Ball';
 import Score from '../Score';
-import Wait from '../Wait';
+//import Wait from '../Wait';
 import {
-  valuesRGB,
-  getRGB,
+  generateRGBValues,
   getLuminance,
   getFontColor,
-  setColor
+  setColor,
+  formatColorObject
 } from '../../utils';
 import { hitWallSound, hitPaddleSound, scoreSound } from '../../utils/sound';
 
@@ -113,16 +113,15 @@ class Pong extends Component {
           x: ballPosition.x + ballVector.x + paddleVars.deltaX,
           y: ballPosition.y - ballVector.y
         }});
-        const rgbValues = valuesRGB();
-        const colorValues = getRGB(rgbValues);
-        const color = setColor(rgbValues);
+        const rgbValues = generateRGBValues(); // sets first, second, and third value for rgb, placeses first second and third into rgb object
+        const color = formatColorObject(rgbValues); // creates rgb color
         console.log(color);
-        const luminance = getLuminance(colorValues);
-        const fontColor = getFontColor(luminance);
+        const luminance = getLuminance(rgbValues); // takes rgb object and gets luminance
+        const fontColor = getFontColor(luminance); // takes luminance and gets fontColor
         console.log(fontColor);
         this.props.onChangeColor(color, fontColor);
-        this.props.webrtc.shout('bgColor', { bgColor: color });
-        this.props.webrtc.shout('fontColor', { fontColor: fontColor });
+        this.props.webrtc.shout('rgb', { rgb: rgbValues }); // sends first second and third value
+        // this.props.webrtc.shout('bgColor', { bgColor: color });
         hitPaddleSound.play();
         return;
       } else {

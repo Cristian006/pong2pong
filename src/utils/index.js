@@ -1,30 +1,23 @@
 /* utils */
-function valuesRGB() {
-  /*
-  const color = randomColor({
-    format: 'rgb'
-  });
-  */
+function generateRGBValues() {
   const first = Math.floor(Math.random() * 256);
   const second = Math.floor(Math.random() * 256);
   const third = Math.floor(Math.random() * 256);
-  return [first, second, third];
-}
-
-function getRGB(rgbValues) {
-  const rgb = {r: rgbValues[0], g: rgbValues[1], b: rgbValues[2] };
+  const rgb = {r: first, g: second, b: third };
   return rgb;
 }
 
-function setColor(rgbValues) {
-  const color = `rgb(${rgbValues[0]}, ${rgbValues[1]}, ${rgbValues[2]})`;
+function setColor({r, g, b}) {
+  const color = `rgb(${r}, ${g}, ${b})`;
   return color;
 }
 
-function getLuminance(rgb) {
-  // need to have specific rgb values
+function formatColorObject({r, g, b}) {
+  return `rgb(${r}, ${g}, ${b})`;
+}
 
-  const C = [rgb.r/255, rgb.g/255, rgb.b/255];
+function getLuminance({r, g, b}) {
+  const C = [r/255, g/255, b/255];
   const NC = C.map((c) => {
       if(c <= 0.03928) {
           return (c/12.92);
@@ -38,4 +31,4 @@ function getFontColor(luminance) {
   return(luminance > 0.179 ? '#212121' : '#f1f1f1');
 }
 
-export { valuesRGB, getRGB, setColor, getLuminance, getFontColor };
+export { generateRGBValues, setColor, getLuminance, getFontColor, formatColorObject };

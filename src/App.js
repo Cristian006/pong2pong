@@ -3,8 +3,12 @@ import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { LioWebRTC } from 'react-liowebrtc';
 import Pong from './components/Pong';
 import StartScreen from './components/StartScreen';
-import { getFontColor } from './utils';
 import { hitPaddleSound, scoreSound } from './utils/sound';
+import {
+  getLuminance,
+  getFontColor,
+  formatColorObject
+} from './utils';
 
 const theme = {
   fontColor: '#ffffff',
@@ -91,23 +95,24 @@ class App extends Component {
         const newBallVector = { ...ballVector, x:  -ballVector.x, y: -ballVector.y };
         this.setState({ ballPosition: newBallPosition, ballVector: newBallVector, renderBall: true });
         break;
-        case 'bgColor':
-      const { bgColor } = payload;
-        this.setState({ bgColor });
-        break;
-      case 'fontColor':
-        const { fontColor } = payload;
-        this.setState({ fontColor });
+      case 'rgb':
+        const { rgb } = payload; // recieves rgb object
+        console.log(rgb);
+        const bgColor = formatColorObject(rgb); // returns rgb string
+        const luminance = getLuminance(rgb); // takes rgb object and gets luminance
+        this.setState({ bgColor: bgColor, fontColor: getFontColor(luminance) });
+        hitPaddleSound.play();
         break;
       case 'score':
         const { score } = payload;
         this.setState({ score });
         scoreSound.play();
         break;
-      case 'bgColor':
+      /*case 'bgColor':
         this.setState({ bgColor: payload, fontColor: getFontColor(payload) });
         hitPaddleSound.play();
         break;
+        */
       default:
         break;
     }
