@@ -9,7 +9,6 @@ import Score from '../Score';
 import {
   generateRGBValues,
   getFontColor,
-  setColor,
   formatColorObject
 } from '../../utils';
 import { hitWallSound, hitPaddleSound, scoreSound } from '../../utils/sound';
