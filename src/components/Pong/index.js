@@ -8,7 +8,6 @@ import Score from '../Score';
 //import Wait from '../Wait';
 import {
   generateRGBValues,
-  getLuminance,
   getFontColor,
   setColor,
   formatColorObject
@@ -115,10 +114,7 @@ class Pong extends Component {
         }});
         const rgbValues = generateRGBValues(); // sets first, second, and third value for rgb, placeses first second and third into rgb object
         const color = formatColorObject(rgbValues); // creates rgb color
-        console.log(color);
-        const luminance = getLuminance(rgbValues); // takes rgb object and gets luminance
-        const fontColor = getFontColor(luminance); // takes luminance and gets fontColor
-        console.log(fontColor);
+        const fontColor = getFontColor(color); // takes luminance and gets fontColor
         this.props.onChangeColor(color, fontColor);
         this.props.webrtc.shout('rgb', { rgb: rgbValues }); // sends first second and third value
         // this.props.webrtc.shout('bgColor', { bgColor: color });
