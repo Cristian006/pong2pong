@@ -5,7 +5,6 @@ import Pong from './components/Pong';
 import StartScreen from './components/StartScreen';
 import { hitPaddleSound, scoreSound } from './utils/sound';
 import {
-  getLuminance,
   getFontColor,
   formatColorObject
 } from './utils';
@@ -99,8 +98,7 @@ class App extends Component {
         const { rgb } = payload; // recieves rgb object
         console.log(rgb);
         const bgColor = formatColorObject(rgb); // returns rgb string
-        const luminance = getLuminance(rgb); // takes rgb object and gets luminance
-        this.setState({ bgColor: bgColor, fontColor: getFontColor(luminance) });
+        this.setState({ bgColor: bgColor, fontColor: getFontColor(bgColor) });
         hitPaddleSound.play();
         break;
       case 'score':
