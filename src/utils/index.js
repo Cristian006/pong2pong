@@ -27,8 +27,9 @@ function getLuminance({r, g, b}) {
   return (0.2126 * NC[0] + 0.7152 * NC[1] + 0.0722 * NC[2]);
 }
 
-function getFontColor(luminance) {
+function getFontColor(bgColor) {
+  const luminance = getLuminance(bgColor);
   return(luminance > 0.179 ? '#212121' : '#f1f1f1');
 }
 
-export { generateRGBValues, setColor, getLuminance, getFontColor, formatColorObject };
+export { generateRGBValues, setColor, getFontColor, formatColorObject };
